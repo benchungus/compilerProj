@@ -1,0 +1,270 @@
+import java_cup.runtime.*;
+
+terminal LPAREN;         //2
+terminal RPAREN;         //3
+terminal COLON;          //4
+terminal MINUS;         //5
+terminal PLUS;          //6
+terminal MULTIPLY;       //7
+terminal DIVIDE;         //8
+terminal NOT;            //9
+terminal TRUE;           //10
+terminal FALSE;          //11
+terminal NOTEQUAL;       //12
+terminal LESSEQUAL;      //13
+terminal GREATEREQUAL;   //14
+terminal EQUAL;          //15
+terminal LESS;           //16
+terminal GREATER;        //17
+terminal OR;             //18
+terminal AND;            //19
+terminal QUESTION;       //20
+terminal ASSIGN;         //21
+terminal VOIDTYPE;       //22
+terminal INTTYPE;        //23
+terminal FLOATTYPE;      //24
+terminal BOOLTYPE;       //25
+terminal CHARTYPE;       //26
+terminal COMMA;          //27
+terminal SEMICOLON;      //28
+terminal RETURN;         //29
+terminal CLASS;          //30
+terminal ELSE;           //31
+terminal IF;             //32
+terminal WHILE;          //33
+terminal READ;           //34
+terminal PRINT;          //35
+terminal PRINTLINE;      //36
+terminal LSQBRACK;       //37
+terminal RSQBRACK;       //38
+terminal LCURLBRACK;     //39
+terminal RCURLBRACK;     //40
+terminal INCREMENT;      //41
+terminal DECREMENT;      //42
+terminal FINAL;          //43
+terminal String ID;      //44
+terminal int NUMBERLIT;  //45
+terminal float FLOATLIT; //46
+terminal String CHARACTERLIT;     //47
+terminal String STRINGLIT;      //48
+
+
+non terminal Program program;
+non terminal Expr expr;
+non terminal Expr unaryExpression;
+non terminal Name name;
+non terminal Args args;
+non terminal Type type;
+non terminal PrintLineList printlinelist;
+non terminal PrintLineList printlist;
+non terminal ReadList readlist;
+non terminal Statement stmt;
+non terminal StatementList stmts;
+non terminal IfEnd ifend;
+non terminal OptionalSemi optionalsemi;
+
+precedence right QUESTION, COLON;
+precedence left OR;
+precedence left AND;
+precedence left NOTEQUAL, EQUAL;
+precedence left LESS, GREATER, LESSEQUAL, GREATEREQUAL;
+precedence left PLUS,MINUS;
+precedence left MULTIPLY,DIVIDE;
+precedence left INTTYPE, FLOATTYPE, VOIDTYPE, BOOLTYPE, CHARTYPE;
+precedence right NOT, INCREMENT, DECREMENT;
+precedence left LPAREN, RPAREN, LSQBRACK, RSQBRACK;
+
+program ::= stmts:ss
+        {: RESULT = new Program(ss); :}
+        ;
+
+args ::= expr:e
+        {: RESULT = new Args(e); :}
+        |
+        expr:e COMMA args:a
+        {: RESULT = new Args(e,a); :}
+        ;
+
+stmts ::= stmt:s stmts:ss
+        {: RESULT = new StatementList(s,ss); :}
+        |
+        {: RESULT = new StatementList(); :}
+        ;
+
+ifend ::= 
+        ELSE LCURLBRACK stmts:ss RCURLBRACK
+        {: RESULT = new IfEnd(ss); :}
+        |
+        {: RESULT = new IfEnd(); :}
+        ;
+
+stmt ::= name:n ASSIGN expr:e SEMICOLON
+        {: RESULT = new Statement(n, e); :}
+        |
+        READ LPAREN readlist:rl RPAREN SEMICOLON
+        {: RESULT = new Statement(rl); :}
+        |
+        PRINT LPAREN printlist:pl RPAREN SEMICOLON
+        {: RESULT = new Statement(pl, "print"); :}
+        |
+        PRINTLINE LPAREN printlinelist:pl RPAREN SEMICOLON
+        {: RESULT = new Statement(pl, "printline"); :}
+        |
+        ID:i LPAREN RPAREN SEMICOLON
+        {: RESULT = new Statement(i, "call empty"); :}
+        |
+        ID:i LPAREN args:a RPAREN SEMICOLON
+        {: RESULT = new Statement(i, a); :}
+        |
+        RETURN SEMICOLON
+        {: RESULT = new Statement("", "void return"); :}
+        |
+        RETURN expr:e SEMICOLON
+        {: RESULT = new Statement(e, "full return"); :}
+        |
+        name:n INCREMENT SEMICOLON
+        {: RESULT = new Statement(n, "increment"); :}
+        |
+        name:n DECREMENT SEMICOLON
+        {: RESULT = new Statement(n, "decrement"); :}
+        |
+        WHILE LPAREN expr:e RPAREN LCURLBRACK stmts:ss RCURLBRACK
+        {: RESULT = new Statement(e, ss, "while"); :}
+        |
+        IF LPAREN expr:e RPAREN LCURLBRACK stmts:ss RCURLBRACK ifend:ie
+        {: RESULT = new Statement(e, ss, ie); :}
+        |
+        LCURLBRACK stmts:ss RCURLBRACK optionalsemi:os
+        {: RESULT = new Statement(ss, os); :}
+        ;
+
+printlinelist ::= printlist:pl
+        {: RESULT = new PrintLineList(pl); :}
+        |
+        {: RESULT = new PrintLineList(); :}
+        ;
+
+optionalsemi ::= SEMICOLON
+        {: RESULT = new OptionalSemi("accept"); :}
+        |
+        {: RESULT = new OptionalSemi("rejected"); :}
+        ;
+
+printlist ::= 
+        expr:e 
+        {: RESULT = new PrintLineList(e); :}
+        |
+        expr:e COMMA printlist:pl
+        {: RESULT = new PrintLineList(e, pl); :}
+        ;
+
+readlist ::= 
+        name:n 
+        {: RESULT = new ReadList(n); :}
+        |
+        name:n COMMA readlist:rl
+        {: RESULT = new ReadList(n, rl); :}
+        ;
+
+expr ::= NUMBERLIT:n
+        {: RESULT = new Expr(n); :}
+        |
+        name:i
+        {: RESULT = new Expr(i); :}
+        |
+        ID:i LPAREN RPAREN
+        {: RESULT = new Expr(i, "empty"); :}
+        |
+        ID:i LPAREN args:a RPAREN
+        {: RESULT = new Expr(i, a); :}
+        |
+        expr:b1 PLUS expr:b2
+        {: RESULT = new Expr(b1, "+", b2); :}
+        |
+        expr:b1 MINUS expr:b2
+        {: RESULT = new Expr(b1, "-", b2); :}
+        |
+        expr:b1 MULTIPLY expr:b2
+        {: RESULT = new Expr(b1, "*", b2); :}
+        |
+        expr:b1 DIVIDE expr:b2
+        {: RESULT = new Expr(b1, "/", b2); :}
+        |
+        expr:b1 GREATER expr:b2
+        {: RESULT = new Expr(b1, ">", b2); :}
+        |
+        expr:b1 LESS expr:b2
+        {: RESULT = new Expr(b1, "<", b2); :}
+        |
+        expr:b1 GREATEREQUAL expr:b2
+        {: RESULT = new Expr(b1, ">=", b2); :}
+        |
+        expr:b1 LESSEQUAL expr:b2
+        {: RESULT = new Expr(b1, "<=", b2); :}
+        |
+        expr:b1 EQUAL expr:b2
+        {: RESULT = new Expr(b1, "==", b2); :}
+        |
+        expr:b1 NOTEQUAL expr:b2
+        {: RESULT = new Expr(b1, "<>", b2); :}
+        |
+        expr:b1 OR expr:b2
+        {: RESULT = new Expr(b1, "||", b2); :}
+        |
+        expr:b1 AND expr:b2
+        {: RESULT = new Expr(b1, "&&", b2); :}
+        |
+        TRUE
+        {: RESULT = new Expr(true); :}
+        |
+        FALSE
+        {: RESULT = new Expr(false); :}
+        |
+        CHARACTERLIT:c
+        {: RESULT = new Expr(c); :}
+        |
+        STRINGLIT:s
+        {: RESULT = new Expr(s); :}
+        |
+        FLOATLIT:f
+        {: RESULT = new Expr(f); :}
+        |
+        LPAREN expr:b RPAREN
+        {: RESULT = new Expr(b, "paren"); :}
+        |
+        NOT expr:b
+        {: RESULT = new Expr(b, "not"); :}
+        |
+        LPAREN expr:b1 QUESTION expr:b2 COLON expr:b3 RPAREN
+        {: RESULT = new Expr(b1, b2, b3); :}
+        |
+        LPAREN type:t RPAREN expr:b1
+        {: RESULT = new Expr(b1, t); :} %prec LPAREN
+        |
+        PLUS expr:b
+        {: RESULT = new Expr(b, "preplus"); :} %prec NOT
+        |
+        MINUS expr:b
+        {: RESULT = new Expr(b, "preminus"); :} %prec NOT
+        ;
+
+        
+type ::= INTTYPE
+        {: RESULT = new Type("int"); :}
+        |
+        CHARTYPE
+        {: RESULT = new Type("char"); :}
+        |
+        BOOLTYPE
+        {: RESULT = new Type("bool"); :}
+        |
+        FLOATTYPE
+        {: RESULT = new Type("float"); :}
+        ;
+
+name ::= ID:i
+        {: RESULT = new Name(i); :}
+        |
+        ID:i LSQBRACK expr:b RSQBRACK
+        {: RESULT = new Name(i, b); :}
+        ;
