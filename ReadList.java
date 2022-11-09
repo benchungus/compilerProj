@@ -16,7 +16,7 @@ public class ReadList extends Token{
         return name.toString(t);
     } 
     else{
-        return name.toString(t) + ", " + read.toString(0);
+        return name.toString(t) + ", " + read.toString(t);
     }
   }
 }

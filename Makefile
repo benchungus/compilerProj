@@ -16,7 +16,11 @@ FILE=    Lexer.java      parser.java    sym.java\
     LexerTest.java	ScannerTest.java	Token.java 		Program.java\
 	Expr.java Statement.java StatementList.java\
 	Name.java Args.java Type.java ReadList.java\
-	IfEnd.java OptionalSemi.java\
+	IfEnd.java OptionalSemi.java FieldDecl.java\
+	FieldDecls.java MemberDecls.java MethodDecls.java\
+	MethodDecl.java OptionalFinal.java OptionalExpr.java\
+	ReturnType.java ArgDecls.java ArgDeclList.java\
+	ArgDecl.java\
 
 
 run: basicTest.txt

@@ -62,6 +62,18 @@ non terminal Statement stmt;
 non terminal StatementList stmts;
 non terminal IfEnd ifend;
 non terminal OptionalSemi optionalsemi;
+non terminal FieldDecls fielddecllist;
+non terminal FieldDecl fielddecl;
+non terminal MemberDecls memberdecls;
+non terminal MethodDecls methoddecllist;
+non terminal MethodDecl methoddecl;
+non terminal OptionalFinal optionalfinal;
+non terminal OptionalExpr optionalexpr;
+non terminal ReturnType returntype;
+non terminal ArgDecls argdecls;
+non terminal ArgDeclList argdecllist;
+non terminal ArgDecl argdecl;
+
 
 precedence right QUESTION, COLON;
 precedence left OR;
@@ -74,8 +86,86 @@ precedence left INTTYPE, FLOATTYPE, VOIDTYPE, BOOLTYPE, CHARTYPE;
 precedence right NOT, INCREMENT, DECREMENT;
 precedence left LPAREN, RPAREN, LSQBRACK, RSQBRACK;
 
-program ::= stmts:ss
-        {: RESULT = new Program(ss); :}
+// program ::= CLASS ID:i LCURLBRACK memberdecls:md RCURLBRACK
+//         {: RESULT = new Program(i, md); :}
+//         ;
+
+program ::=  fielddecllist:fdl methoddecl:ss
+        {: RESULT = new Program(fdl, ss); :}
+        ;
+
+memberdecls ::= fielddecllist:fdl methoddecllist:mdl
+        {: RESULT = new MemberDecls(fdl, mdl); :}
+        ;
+
+fielddecllist ::= optionalfinal:of type:t ID:i optionalexpr:oe SEMICOLON fielddecllist:fdl 
+        {: RESULT = new FieldDecls(of, t, i, oe, fdl); :}
+        |
+        type:t ID:i optionalexpr:oe SEMICOLON fielddecllist:fdl
+        {: RESULT = new FieldDecls(t, i, oe, fdl); :} 
+        |
+        {: RESULT = new FieldDecls(); :} 
+        |
+        type:t ID:i LSQBRACK NUMBERLIT:n RSQBRACK SEMICOLON fielddecllist:fdl 
+        {: RESULT = new FieldDecls(t, i, n, fdl); :} 
+        ;
+
+
+// fielddecl ::= optionalfinal:of type:t ID:i optionalexpr:oe SEMICOLON
+//         {: RESULT = new FieldDecl(of, t, i, oe); :}
+//         |
+//         type:t ID:i optionalexpr:oe SEMICOLON
+//         {: RESULT = new FieldDecl(t, i, oe); :}
+//         |
+//         type:t ID:i LSQBRACK NUMBERLIT:n RSQBRACK SEMICOLON
+//         {: RESULT = new FieldDecl(t, i, n); :}
+//         ;
+
+methoddecllist ::= returntype:rt ID:i LPAREN argdecls:ads RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK optionalsemi:os methoddecllist:mdl 
+        {: RESULT = new MethodDecls(rt, i, ads, fdl, ss, os, mdl); :}
+        |
+        {: RESULT = new MethodDecls(); :}
+        ;
+
+// methoddecl ::= returntype:rt ID:i LPAREN argdecls:ads RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK optionalsemi:os
+//         {: RESULT = new MethodDecl(rt, i, ads, fdl, ss, os); :}
+//         ;
+
+optionalfinal ::= FINAL
+        {: RESULT = new OptionalFinal("FINAL"); :}
+        ;
+
+optionalexpr ::= ASSIGN expr:e
+        {: RESULT = new OptionalExpr(e); :}
+        |
+        {: RESULT = new OptionalExpr(); :}
+        ;
+
+returntype ::= type:t
+        {: RESULT = new ReturnType(t); :}
+        |
+        VOIDTYPE
+        {: RESULT = new ReturnType(); :}
+        ;
+
+argdecls ::= argdecllist:adl
+        {: RESULT = new ArgDecls(adl); :}
+        |
+        {: RESULT = new ArgDecls(); :}
+        ;
+
+argdecllist ::= argdecl:ad COMMA argdecllist:adl
+        {: RESULT = new ArgDeclList(ad, adl); :}
+        |
+        argdecl:ad
+        {: RESULT = new ArgDeclList(ad); :}
+        ;
+
+argdecl ::= type:t ID:i
+        {: RESULT = new ArgDecl(t, i, "no brack"); :}
+        |
+        type:t ID:i LSQBRACK RSQBRACK
+        {: RESULT = new ArgDecl(t, i, "brack"); :}
         ;
 
 args ::= expr:e
@@ -92,11 +182,12 @@ stmts ::= stmt:s stmts:ss
         ;
 
 ifend ::= 
-        ELSE LCURLBRACK stmts:ss RCURLBRACK
-        {: RESULT = new IfEnd(ss); :}
+        ELSE LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK
+        {: RESULT = new IfEnd(fdl, ss); :}
         |
         {: RESULT = new IfEnd(); :}
         ;
+
 
 stmt ::= name:n ASSIGN expr:e SEMICOLON
         {: RESULT = new Statement(n, e); :}
@@ -128,14 +219,14 @@ stmt ::= name:n ASSIGN expr:e SEMICOLON
         name:n DECREMENT SEMICOLON
         {: RESULT = new Statement(n, "decrement"); :}
         |
-        WHILE LPAREN expr:e RPAREN LCURLBRACK stmts:ss RCURLBRACK
-        {: RESULT = new Statement(e, ss, "while"); :}
+        WHILE LPAREN expr:e RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK
+        {: RESULT = new Statement(e, fdl, ss); :}
         |
-        IF LPAREN expr:e RPAREN LCURLBRACK stmts:ss RCURLBRACK ifend:ie
-        {: RESULT = new Statement(e, ss, ie); :}
+        IF LPAREN expr:e RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK ifend:ie
+        {: RESULT = new Statement(e, fdl, ss, ie); :}
         |
-        LCURLBRACK stmts:ss RCURLBRACK optionalsemi:os
-        {: RESULT = new Statement(ss, os); :}
+        LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK optionalsemi:os
+        {: RESULT = new Statement(fdl, ss, os); :}
         ;
 
 printlinelist ::= printlist:pl

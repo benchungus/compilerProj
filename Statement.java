@@ -9,6 +9,7 @@ public class Statement extends Token {
     StatementList stmts;
     IfEnd ifend;
     OptionalSemi optionalSemi;
+    FieldDecls fielddecllist;
 
 
     public Statement(Expr e, String op) {
@@ -22,8 +23,16 @@ public class Statement extends Token {
         operation = op;
     }
 
-    public Statement(Expr e, StatementList ss, IfEnd ie) {
+    public Statement(Expr e, FieldDecls fdl, StatementList ss){
         expr = e;
+        fielddecllist = fdl;
+        stmts = ss;
+        operation = "while";
+    }
+
+    public Statement(Expr e, FieldDecls fdl, StatementList ss, IfEnd ie) {
+        expr = e;
+        fielddecllist = fdl;
         stmts = ss;
         ifend = ie;
         operation = "if";
@@ -61,7 +70,8 @@ public class Statement extends Token {
         operation = "assign";
     }
 
-    public Statement(StatementList sl, OptionalSemi os){
+    public Statement(FieldDecls fdl, StatementList sl, OptionalSemi os){
+        fielddecllist = fdl;
         stmts = sl;
         optionalSemi = os;
         operation = "optional semi";
@@ -70,7 +80,7 @@ public class Statement extends Token {
     public String toString(int t) {
       switch (operation){
         case "assign":
-            return name.toString(t) + " = " + expr.toString(0) + ";\n";
+            return getTabs(t) + name.toString(0) + " = " + expr.toString(0) + ";\n";
         case "read":
             return getTabs(t) + "READ (" + readList.toString(0) + ");\n";
         case "print":
@@ -78,11 +88,11 @@ public class Statement extends Token {
         case "printline":
             return getTabs(t) + "PRINTLINE (" + printList.toString(0) + ");\n";
         case "call empty":
-            return getTabs(t) + value + "();";
+            return getTabs(t) + value + "();\n";
         case "call full":
             return getTabs(t) + value + "(" + args.toString(0) +");\n";
         case "void return":
-            return getTabs(t) + "RETURN;";
+            return getTabs(t) + "RETURN;\n";
         case "full return":
             return getTabs(t) + "RETURN " + expr.toString(0) +";\n";
         case "increment":
@@ -90,11 +100,11 @@ public class Statement extends Token {
         case "decrement":
             return getTabs(t) + name.toString(0) + "--;\n";
         case "optional semi":
-            return getTabs(t) + "{\n" + stmts.toString(t+1) + getTabs(t) + "}" + optionalSemi.toString(0) + "\n";
+            return getTabs(t) + "{\n" + fielddecllist.toString(t+1) + stmts.toString(t+1) + getTabs(t) + "}" + optionalSemi.toString(0) + "\n";
         case "while":
-          return getTabs(t) + "WHILE: ( " + expr.toString(0) + " ) {\n" + stmts.toString(t+1) + getTabs(t) + "}\n";
+          return getTabs(t) + "WHILE: ( " + expr.toString(0) + " ) {\n" + fielddecllist.toString(t+1) + stmts.toString(t+1) + getTabs(t) + "}\n";
         case "if":
-          return getTabs(t) + "IF: ( " + expr.toString(0) + " ) {\n" + stmts.toString(t+1) + getTabs(t) + "}\n" + ifend.toString(t);
+          return getTabs(t) + "IF: ( " + expr.toString(0) + " ) {\n" + fielddecllist.toString(t+1) + stmts.toString(t+1) + getTabs(t) + "}\n" + ifend.toString(t);
       }
       return "";
     }

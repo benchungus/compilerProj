@@ -1,7 +1,9 @@
 public class IfEnd extends Token{
     StatementList stmts;
+    FieldDecls fielddeclslist;
 
-    public IfEnd(StatementList ss){
+    public IfEnd(FieldDecls fdl, StatementList ss){
+        fielddeclslist = fdl;
         stmts = ss;
     }
 
@@ -12,6 +14,6 @@ public class IfEnd extends Token{
         if(stmts == null){
             return "";
         }
-        return getTabs(t) + "ELSE: {\n" + stmts.toString(t+1) + getTabs(t) + "}\n" ;
+        return getTabs(t) + "ELSE: {\n" + fielddeclslist.toString(t+1) + stmts.toString(t+1) + getTabs(t) + "}\n" ;
     }
 }
