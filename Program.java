@@ -1,24 +1,25 @@
 class Program extends Token {
      String id;
      MemberDecls memberdecls;
-    ArgDecls argdecls;
-     MethodDecl methoddecls;
-     FieldDecls fieldDecls;
+     String op;
     //Constructor
-     public Program(FieldDecls i, MethodDecl e) {
-        //fieldDecls = f;
-        //fieldDecls = i;
-        fieldDecls = i;
-        methoddecls = e;
-     }
+    public Program(String i) {
+      id = i;
+      op = "empty";
+    }
 
     public Program(String i, MemberDecls md) {
-      //id = i;
+      id = i;
       memberdecls = md;
+      op = "full";
     }
   
     public String toString(int t) {
-      //return "Program:\n" + getTabs(t+1) + "class " + id + "{\n" + memberdecls.toString(t+1) + getTabs(t+1) + "}\n";
-      return "Program:\n" /*+ fieldDecls.toString(0)*/ + methoddecls.toString(0);
+      if(op.equals("empty")){
+        return "Program:\n" + getTabs(t) + "class " + id + "{\n" + getTabs(t) + "}\n";
+      }
+      else{
+        return "Program:\n" + getTabs(t) + "class " + id + "{\n" + memberdecls.toString(t+1) + getTabs(t) + "}\n";
+      }
     }
   }

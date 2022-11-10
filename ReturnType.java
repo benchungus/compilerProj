@@ -16,7 +16,7 @@ public class ReturnType extends Token{
             return type.toString(0);
         }
         else if(op.equals("void")){
-            return "type: void";
+            return "void";
         }
         else{
             return "ERROR IN RETURNTYPE";

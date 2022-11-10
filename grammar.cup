@@ -64,7 +64,9 @@ non terminal IfEnd ifend;
 non terminal OptionalSemi optionalsemi;
 non terminal FieldDecls fielddecllist;
 non terminal FieldDecl fielddecl;
+non terminal FieldDecls fielddeclend;
 non terminal MemberDecls memberdecls;
+non terminal MethodDecls methoddeclend;
 non terminal MethodDecls methoddecllist;
 non terminal MethodDecl methoddecl;
 non terminal OptionalFinal optionalfinal;
@@ -86,16 +88,37 @@ precedence left INTTYPE, FLOATTYPE, VOIDTYPE, BOOLTYPE, CHARTYPE;
 precedence right NOT, INCREMENT, DECREMENT;
 precedence left LPAREN, RPAREN, LSQBRACK, RSQBRACK;
 
-// program ::= CLASS ID:i LCURLBRACK memberdecls:md RCURLBRACK
-//         {: RESULT = new Program(i, md); :}
-//         ;
-
-program ::=  fielddecllist:fdl methoddecl:ss
-        {: RESULT = new Program(fdl, ss); :}
+program ::= CLASS ID:i LCURLBRACK memberdecls:md RCURLBRACK
+        {: RESULT = new Program(i, md); :}
+        |
+        CLASS ID:i LCURLBRACK RCURLBRACK
+        {: RESULT = new Program(i); :}
         ;
 
-memberdecls ::= fielddecllist:fdl methoddecllist:mdl
-        {: RESULT = new MemberDecls(fdl, mdl); :}
+memberdecls ::= VOIDTYPE ID:i methoddeclend:mde
+        {: RESULT = new MemberDecls(i, mde, "VOID"); :}
+        |
+        type:t ID:i methoddeclend:mde
+        {: RESULT = new MemberDecls(t, i, mde); :}
+        |
+        type:t ID:i fielddeclend:fde
+        {: RESULT = new MemberDecls(t, i, fde, "nonfinal"); :}
+        |
+        FINAL type:t ID:i fielddeclend:fde
+        {: RESULT = new MemberDecls(t, i, fde, "final"); :}
+        ;
+
+fielddeclend ::= optionalexpr:oe SEMICOLON memberdecls:md
+        {: RESULT = new FieldDecls(oe, md); :}
+        |
+        LSQBRACK NUMBERLIT:n RSQBRACK SEMICOLON memberdecls:md
+        {: RESULT = new FieldDecls(n, md); :} 
+        |
+        optionalexpr:oe SEMICOLON
+        {: RESULT = new FieldDecls(oe, "no end"); :}
+        |
+        LSQBRACK NUMBERLIT:n RSQBRACK SEMICOLON
+        {: RESULT = new FieldDecls(n, "no end brack"); :} 
         ;
 
 fielddecllist ::= optionalfinal:of type:t ID:i optionalexpr:oe SEMICOLON fielddecllist:fdl 
@@ -110,26 +133,15 @@ fielddecllist ::= optionalfinal:of type:t ID:i optionalexpr:oe SEMICOLON fieldde
         {: RESULT = new FieldDecls(t, i, n, fdl); :} 
         ;
 
-
-// fielddecl ::= optionalfinal:of type:t ID:i optionalexpr:oe SEMICOLON
-//         {: RESULT = new FieldDecl(of, t, i, oe); :}
-//         |
-//         type:t ID:i optionalexpr:oe SEMICOLON
-//         {: RESULT = new FieldDecl(t, i, oe); :}
-//         |
-//         type:t ID:i LSQBRACK NUMBERLIT:n RSQBRACK SEMICOLON
-//         {: RESULT = new FieldDecl(t, i, n); :}
-//         ;
+methoddeclend ::= LPAREN argdecls:ads RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK optionalsemi:os methoddecllist:mdl 
+        {: RESULT = new MethodDecls(ads, fdl, ss, os, mdl); :}
+        ;
 
 methoddecllist ::= returntype:rt ID:i LPAREN argdecls:ads RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK optionalsemi:os methoddecllist:mdl 
         {: RESULT = new MethodDecls(rt, i, ads, fdl, ss, os, mdl); :}
         |
         {: RESULT = new MethodDecls(); :}
         ;
-
-// methoddecl ::= returntype:rt ID:i LPAREN argdecls:ads RPAREN LCURLBRACK fielddecllist:fdl stmts:ss RCURLBRACK optionalsemi:os
-//         {: RESULT = new MethodDecl(rt, i, ads, fdl, ss, os); :}
-//         ;
 
 optionalfinal ::= FINAL
         {: RESULT = new OptionalFinal("FINAL"); :}

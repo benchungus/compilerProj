@@ -6,6 +6,6 @@ public class Type extends Token {
     }
 
     public String toString(int t) {
-        return "type:" + type;
+        return type;
       }
 }

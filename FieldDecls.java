@@ -7,6 +7,7 @@ public class FieldDecls extends Token{
     OptionalExpr optionalexpr;
     int num;
     String op;
+    MemberDecls memberdecls;
 
     public FieldDecls(OptionalFinal of, Type t, String i, OptionalExpr oe, FieldDecls fdl){
         fielddecllist = fdl;
@@ -33,6 +34,28 @@ public class FieldDecls extends Token{
         op = "BRACK";
     }
 
+    public FieldDecls(OptionalExpr oe, MemberDecls md){
+        memberdecls = md;
+        optionalexpr = oe;
+        op = "fde oe";
+    }
+
+    public FieldDecls(int n, MemberDecls md){
+        memberdecls = md;
+        num = n;
+        op = "fde brack";
+    }
+
+    public FieldDecls(OptionalExpr oe, String o){
+        optionalexpr = oe;
+        op = o;
+    }
+
+    public FieldDecls(int n, String o){
+        num = n;
+        op = o;
+    }
+
     public FieldDecls(){
         op = "null";
     }
@@ -40,14 +63,26 @@ public class FieldDecls extends Token{
     public String toString(int t){
         if(op.equals("OPFIN")){
             return getTabs(t) + optionalfinal.toString(0) + " " + type.toString(0) + " " + id + 
-            " " + optionalexpr.toString(0) + ";\n" + fielddecllist.toString(0);
+            " " + optionalexpr.toString(0) + ";\n" + fielddecllist.toString(t);
         }
         else if(op.equals("NO FIN")){
             return getTabs(t) + type.toString(0) + " " + id + 
-            " " + optionalexpr.toString(0) + ";\n"+ fielddecllist.toString(0);
+            " " + optionalexpr.toString(0) + ";\n"+ fielddecllist.toString(t);
         }
         else if(op.equals("BRACK")){
-            return getTabs(t) + type.toString(0) + " " + id + "[" + Integer.toString(num) + "]\n"+ fielddecllist.toString(0);
+            return getTabs(t) + type.toString(0) + " " + id + "[" + Integer.toString(num) + "]\n"+ fielddecllist.toString(t);
+        }
+        else if(op.equals("fde brack")){
+            return "[" + Integer.toString(num) + "]\n"+ memberdecls.toString(t);
+        }
+        else if(op.equals("fde oe")){
+            return optionalexpr.toString(0) + ";\n"+ memberdecls.toString(t);
+        }
+        else if(op.equals("no end brack")){
+            return "[" + Integer.toString(num) + "]\n";
+        }
+        else if(op.equals("no end")){
+            return optionalexpr.toString(0) + ";\n";
         }
         else if(op.equals("null")){
             return "";
