@@ -19,4 +19,8 @@ public class ReadList extends Token{
         return name.toString(t) + ", " + read.toString(t);
     }
   }
+
+  public TypeInfo typeCheck() throws TypeException{
+    throw new TypeException("AAAAA");
+  }
 }

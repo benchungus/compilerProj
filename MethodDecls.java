@@ -48,4 +48,8 @@ public class MethodDecls extends Token {
             return "ERROR IN METHODDECLS";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

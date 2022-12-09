@@ -22,4 +22,8 @@ public class ReturnType extends Token{
             return "ERROR IN RETURNTYPE";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

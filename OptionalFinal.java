@@ -20,4 +20,8 @@ public class OptionalFinal extends Token{
             return "ERROR IN OPTIONALFINAL";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

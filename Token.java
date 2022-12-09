@@ -12,5 +12,7 @@ abstract class Token {
     {
         return "";
     }
+
+    abstract TypeInfo typeCheck() throws TypeException;
   }
   

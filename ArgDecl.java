@@ -20,4 +20,8 @@ public class ArgDecl extends Token{
             return "ERROR";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

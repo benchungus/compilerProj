@@ -22,4 +22,8 @@ public class OptionalExpr extends Token{
             return "ERROR IN OPTIONALEXPR";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

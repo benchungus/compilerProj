@@ -91,4 +91,8 @@ public class FieldDecls extends Token{
             return "ERROR IN FIELDDECLS";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

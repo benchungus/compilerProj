@@ -25,4 +25,8 @@ public class StatementList extends Token {
             return stmt.toString(t) + stmts.toString(t);
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

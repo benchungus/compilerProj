@@ -12,4 +12,8 @@ public class OptionalSemi extends Token{
             return "";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

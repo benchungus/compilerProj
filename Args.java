@@ -22,4 +22,8 @@ public class Args extends Token{
             return expr.toString(0) + " , " + args.toString(0);
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

@@ -102,5 +102,9 @@ public class Expr extends Token {
       }
       return "(" + lhs.toString(0) + " " + operator + " " + rhs.toString(0) + ")";
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+      throw new TypeException("AAAAA");
+    }
 }
 

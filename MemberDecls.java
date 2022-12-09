@@ -57,4 +57,8 @@ public class MemberDecls extends Token{
             return "error in memberdecls";
         }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

@@ -20,4 +20,8 @@ public class MethodDecl extends Token {
         return getTabs(t) + "METHOD:" + returntype.toString(t) + " " + id + " (" + argdecls.toString(t)+
         ") {\n" + fielddecllist.toString(t+1) + " " + stmts.toString(t+1) + getTabs(t) + "} " + optionalsemi.toString(0) + "\n";  
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("AAAAA");
+    }
 }

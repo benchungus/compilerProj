@@ -22,4 +22,8 @@ class Program extends Token {
         return "Program:\n" + getTabs(t) + "class " + id + "{\n" + memberdecls.toString(t+1) + getTabs(t) + "}\n";
       }
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+      throw new TypeException("AAAAA");
+    }
   }
