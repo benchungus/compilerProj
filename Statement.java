@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Statement extends Token {
     Expr expr;
     String operation;
@@ -110,7 +112,98 @@ public class Statement extends Token {
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("statement");
+        switch (operation){
+            case "assign":{
+                TypeInfo ti = name.typeCheck();
+                TypeInfo exprTi = expr.typeCheck();
+                if(!exprTi.isNull()){
+                    canConvert(ti, exprTi);
+                }
+                if(ti.isArray != exprTi.isArray){
+                    throw new TypeException("Error: Array type and non-array type cannot be used together in assignment");
+                }
+                if(ti.isFinal){
+                    throw new TypeException("Error: Cannot assign new value to a final variable");
+                }
+                return new TypeInfo();
+            }
+            case "read":
+                readList.typeCheck();
+                return new TypeInfo();
+            case "print":
+                printList.typeCheck();
+                return new TypeInfo();
+            case "printline":
+                printList.typeCheck();
+                return new TypeInfo();
+            case "call empty":{
+                TypeInfo methodTi = symbolTable.getMethod(value);
+                ArrayList<TypeInfo> params = methodTi.getParams();
+                if(params.size() != 0){
+                    throw new TypeException("Error: Function expected " + params.size() + " parameters, instead got 0");
+                }
+                return new TypeInfo();
+            }
+            case "call full":
+                TypeInfo methodTi = symbolTable.getMethod(value);
+                ArrayList<TypeInfo> params = methodTi.getParams();
+                ArrayList<TypeInfo> givenParams = args.typeCheck();
+                if(params.size() != givenParams.size()){
+                    throw new TypeException("Error: Function expected " + params.size() + " parameters, instead got " + givenParams.size());
+                }
+                for(int i = 0; i < params.size(); i++){
+                    canConvert(params.get(i), givenParams.get(i));
+                    if(params.get(i).isArray != givenParams.get(i).isArray){
+                        throw new TypeException("Error: Tried to use array in place of non-array");
+                    }
+                }
+                return new TypeInfo();
+            case "void return":
+                return new TypeInfo();
+            case "full return":
+                return expr.typeCheck();
+            case "increment":{
+                TypeInfo ti = name.typeCheck();
+                if(!ti.type.equals("int") && !ti.type.equals("float")){
+                    throw new TypeException("Error: increment can only be performed on ints and floats");
+                }
+                return new TypeInfo();
+            }
+            case "decrement":{
+                TypeInfo ti = name.typeCheck();
+                if(!ti.type.equals("int") && !ti.type.equals("float")){
+                    throw new TypeException("Error: decrement can only be performed on ints and floats");
+                }
+                return new TypeInfo();
+            }
+            case "optional semi":
+                symbolTable.startScope();
+                fielddecllist.typeCheck();
+                stmts.typeCheck();
+                symbolTable.endScope();
+                return new TypeInfo();
+            case "while":{
+                if(!expr.typeCheck().getType().equals("bool") && !expr.typeCheck().getType().equals("int")){
+                    throw new TypeException("Condition must be of type bool");
+                }
+                symbolTable.startScope();
+                fielddecllist.typeCheck();
+                TypeInfo ti = stmts.typeCheck();
+                symbolTable.endScope();
+                return ti;
+            }
+            case "if":
+                if(!expr.typeCheck().getType().equals("bool") && !expr.typeCheck().getType().equals("int")){
+                    throw new TypeException("Condition must be of type bool");
+                }
+                symbolTable.startScope();
+                fielddecllist.typeCheck();
+                TypeInfo ti = stmts.typeCheck();
+                symbolTable.endScope();
+                ifend.typeCheck();
+                return ti;
+          }
+        return new TypeInfo();
     }
 }
 

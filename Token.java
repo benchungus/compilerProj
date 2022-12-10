@@ -32,6 +32,7 @@ abstract class Token {
             }
         }
     }
+    
 
     //abstract TypeInfo typeCheck() throws TypeException;
   }

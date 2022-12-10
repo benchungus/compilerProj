@@ -22,6 +22,17 @@ public class Name extends Token {
     }
 
     public TypeInfo typeCheck() throws TypeException{
-      throw new TypeException("name");
-  }
+      if(expr == null){
+        TypeInfo ti = symbolTable.get(value);
+        return ti;
+      }
+      else{
+        TypeInfo ti = symbolTable.get(value);
+        ti.removeArray();
+        if(!expr.typeCheck().getType().equals("int")){
+          throw new TypeException("Cannot access array with type " + expr.typeCheck().getType());
+        }
+        return ti;
+      }
+    }
 }

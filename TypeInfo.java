@@ -22,6 +22,10 @@ public class TypeInfo{
         isArray = true;
     }
 
+    public void removeArray(){
+        isArray = false;
+    }
+
     public void setMethod(){
         isMethod = true;
         params = new ArrayList<>();
@@ -29,6 +33,10 @@ public class TypeInfo{
 
     public void addParam(TypeInfo ti){
         params.add(ti);
+    }
+
+    public ArrayList<TypeInfo> getParams(){
+        return params;
     }
 
     public void setType(String t){

@@ -18,6 +18,15 @@ public class IfEnd extends Token{
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("ifend");
+        if(stmts == null){
+            return new TypeInfo();
+        }
+        else{
+            symbolTable.startScope();
+            fielddeclslist.typeCheck();
+            TypeInfo ti = stmts.typeCheck();
+            symbolTable.endScope();
+            return ti;
+        }
     }
 }

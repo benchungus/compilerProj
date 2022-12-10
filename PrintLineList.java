@@ -37,6 +37,32 @@ class PrintLineList extends Token {
   }
 
   public TypeInfo typeCheck() throws TypeException{
-    throw new TypeException("pll");
+    if(pll == null){
+      if(expr != null){
+        TypeInfo exprTi = expr.typeCheck();
+        if(exprTi.isArray){
+          throw new TypeException("Error: Cannot print an array");
+        }
+        if(exprTi.getType().equals("void")){
+          throw new TypeException("Error: Cannot print void type");
+        }
+      }
+    } 
+    else{
+      if(expr != null){
+        TypeInfo exprTi = expr.typeCheck();
+        if(exprTi.isArray){
+          throw new TypeException("Error: Cannot print an array");
+        }
+        if(exprTi.getType().equals("void")){
+          throw new TypeException("Error: Cannot print void type");
+        }
+        pll.typeCheck();
+      }
+      else{
+        pll.typeCheck();
+      }
+    }
+    return new TypeInfo();
   }
 }

@@ -21,6 +21,32 @@ public class ReadList extends Token{
   }
 
   public TypeInfo typeCheck() throws TypeException{
-    throw new TypeException("readlist");
+    if(read == null){
+      TypeInfo ti = name.typeCheck();
+      if(ti.isFinal){
+        throw new TypeException("Error: Cannot read from final");
+      }
+      if(ti.isArray){
+        throw new TypeException("Error: Cannot read from array");
+      }
+      if(ti.isMethod){
+        throw new TypeException("Error: Cannot read from method");
+      }
+      return ti;
+    } 
+    else{
+      TypeInfo ti = name.typeCheck();
+      if(ti.isFinal){
+        throw new TypeException("Error: Cannot read from final");
+      }
+      if(ti.isArray){
+        throw new TypeException("Error: Cannot read from array");
+      }
+      if(ti.isMethod){
+        throw new TypeException("Error: Cannot read from method");
+      }
+      read.typeCheck();
+      return ti;
+    }
   }
 }

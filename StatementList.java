@@ -27,6 +27,25 @@ public class StatementList extends Token {
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("statementlist");
+        if(stmts == null){
+            if(stmt != null){
+                TypeInfo ti = stmt.typeCheck();
+                if(!ti.isNull()){
+                    return ti;
+                }
+                return new TypeInfo();
+            }
+            return new TypeInfo();
+        }
+        else{
+            TypeInfo ti = stmt.typeCheck();
+            TypeInfo stmtsTi = stmts.typeCheck();
+            if(!ti.isNull()){
+                return ti;
+            }
+            else{
+                return stmtsTi;
+            }
+        }
     }
 }

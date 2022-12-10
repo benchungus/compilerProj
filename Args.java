@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Args extends Token{
@@ -23,7 +24,17 @@ public class Args extends Token{
         }
     }
 
-    public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("args");
+    public ArrayList<TypeInfo> typeCheck() throws TypeException{
+        if(args == null){
+            ArrayList<TypeInfo> al = new ArrayList<>();
+            al.add(expr.typeCheck());
+            return al;
+        }
+        else{
+            TypeInfo ti = expr.typeCheck();
+            ArrayList<TypeInfo> al = args.typeCheck();
+            al.add(0, ti);
+            return args.typeCheck();
+        }
     }
 }
