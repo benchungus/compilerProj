@@ -22,6 +22,6 @@ public class Name extends Token {
     }
 
     public TypeInfo typeCheck() throws TypeException{
-      throw new TypeException("AAAAA");
+      throw new TypeException("name");
   }
 }

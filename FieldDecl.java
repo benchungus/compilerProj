@@ -46,6 +46,6 @@ public class FieldDecl extends Token{
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+        throw new TypeException("fdcl");
     }
 }

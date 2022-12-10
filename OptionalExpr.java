@@ -24,6 +24,11 @@ public class OptionalExpr extends Token{
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+        if(op.equals("expr")){
+            return expr.typeCheck();
+        }
+        else{
+            return new TypeInfo();
+        }
     }
 }

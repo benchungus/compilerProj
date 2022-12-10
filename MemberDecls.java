@@ -59,6 +59,30 @@ public class MemberDecls extends Token{
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+        if(op.equals("method")){
+            TypeInfo ti = new TypeInfo(type.toString());
+            ti.setMethod();
+            return methoddecllist.typeCheck(ti);
+        }
+        else if(op.equals("nonfinal")){
+            TypeInfo ti = new TypeInfo(type.toString());
+            symbolTable.addVar(id, ti);
+            return fielddecllist.typeCheck(ti);
+        }
+        else if(op.equals("final")){
+            TypeInfo ti = new TypeInfo(type.toString());
+            ti.setFinal();
+            symbolTable.addVar(id, ti);
+            return fielddecllist.typeCheck(ti);
+        }
+        else if(op.equals("VOID")){
+            //System.out.println("here");
+            TypeInfo ti = new TypeInfo("void");
+            ti.setMethod();
+            return methoddecllist.typeCheck(ti);
+        }
+        else{
+            return new TypeInfo();
+        }
     }
 }

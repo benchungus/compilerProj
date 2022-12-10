@@ -23,7 +23,12 @@ public class ArgDecls extends Token{
         }
     }
 
-    public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+        if(op.equals("adl")){
+            return argdecllist.typeCheck(ti);
+        }
+        else {
+            return new TypeInfo();
+        }
     }
 }

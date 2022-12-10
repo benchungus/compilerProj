@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+
 public class TypeInfo{
     boolean isFinal = false;
     String type;
     boolean isArray = false;
     boolean isMethod = false;
+    ArrayList<TypeInfo> params;
     public TypeInfo(){
 
     }
@@ -21,6 +24,15 @@ public class TypeInfo{
 
     public void setMethod(){
         isMethod = true;
+        params = new ArrayList<>();
+    }
+
+    public void addParam(TypeInfo ti){
+        params.add(ti);
+    }
+
+    public void setType(String t){
+        type = t;
     }
 
     public boolean getFinal(){
@@ -37,6 +49,13 @@ public class TypeInfo{
 
     public boolean getMethod(){
         return isMethod;
+    }
+
+    public boolean isNull(){
+        if(type == null){
+            return true;
+        }
+        return false;
     }
 
 }

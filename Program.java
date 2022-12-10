@@ -6,12 +6,14 @@ class Program extends Token {
     public Program(String i) {
       id = i;
       op = "empty";
+      symbolTable = new SymbolTable();
     }
 
     public Program(String i, MemberDecls md) {
       id = i;
       memberdecls = md;
       op = "full";
+      symbolTable = new SymbolTable();
     }
   
     public String toString(int t) {
@@ -24,6 +26,11 @@ class Program extends Token {
     }
 
     public TypeInfo typeCheck() throws TypeException{
-      throw new TypeException("AAAAA");
+      if(op.equals("empty")){
+        return new TypeInfo();
+      }
+      else{
+        return memberdecls.typeCheck();
+      }
     }
   }

@@ -93,6 +93,76 @@ public class FieldDecls extends Token{
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+        if(op.equals("OPFIN")){
+            TypeInfo ti = new TypeInfo(type.toString());
+            if(optionalfinal.typeCheck() == true){
+                ti.setFinal();
+            }
+            symbolTable.addVar(id, ti);
+            TypeInfo exprTi = optionalexpr.typeCheck();
+            if(!exprTi.isNull()){
+                canConvert(ti, exprTi);
+            }
+            fielddecllist.typeCheck();
+            return ti;
+        }
+        else if(op.equals("NO FIN")){
+            TypeInfo ti = new TypeInfo(type.toString());
+            symbolTable.addVar(id, ti);
+            TypeInfo exprTi = optionalexpr.typeCheck();
+            if(!exprTi.isNull()){
+                canConvert(ti, exprTi);
+            }
+            fielddecllist.typeCheck();
+            return ti;
+        }
+        else if(op.equals("BRACK")){
+            TypeInfo ti = new TypeInfo(type.toString());
+            ti.setArray();
+            symbolTable.addVar(id, ti);
+            TypeInfo exprTi = optionalexpr.typeCheck();
+            if(!exprTi.isNull()){
+                canConvert(ti, exprTi);
+            }
+            fielddecllist.typeCheck();
+            return ti;
+        }
+        else {
+            return new TypeInfo();
+        }
+    }
+
+    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+        if(op.equals("fde brack")){
+            ti.setArray();
+            symbolTable.addVar(id, ti);
+            memberdecls.typeCheck();
+            return ti;
+        }
+        else if(op.equals("fde oe")){
+            symbolTable.addVar(id, ti);
+            TypeInfo exprTi = optionalexpr.typeCheck();
+            if(!exprTi.isNull()){
+                canConvert(ti, exprTi);
+            }
+            memberdecls.typeCheck();
+            return ti;
+        }
+        else if(op.equals("no end brack")){
+            ti.setArray();
+            symbolTable.addVar(id, ti);
+            return ti;
+        }
+        else if(op.equals("no end")){
+            symbolTable.addVar(id, ti);
+            TypeInfo exprTi = optionalexpr.typeCheck();
+            if(!exprTi.isNull()){
+                canConvert(ti, exprTi);
+            }
+            return ti;
+        }
+        else{
+            return new TypeInfo();
+        }
     }
 }

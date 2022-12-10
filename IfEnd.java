@@ -16,4 +16,8 @@ public class IfEnd extends Token{
         }
         return getTabs(t) + "ELSE: {\n" + fielddeclslist.toString(t+1) + stmts.toString(t+1) + getTabs(t) + "}\n" ;
     }
+
+    public TypeInfo typeCheck() throws TypeException{
+        throw new TypeException("ifend");
+    }
 }

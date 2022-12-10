@@ -21,7 +21,12 @@ public class OptionalFinal extends Token{
         }
     }
 
-    public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+    public boolean typeCheck() throws TypeException{
+        if(op.equals("FINAL")){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

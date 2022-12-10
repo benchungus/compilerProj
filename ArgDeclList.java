@@ -26,7 +26,13 @@ public class ArgDeclList extends Token{
         }
     }
 
-    public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+        if(op.equals("list")){
+            argdecl.typeCheck(ti);
+            return argdecllist.typeCheck(ti);
+        }
+        else{
+            return argdecl.typeCheck(ti);
+        }
     }
 }

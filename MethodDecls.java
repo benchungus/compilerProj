@@ -50,6 +50,37 @@ public class MethodDecls extends Token {
     }
 
     public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("AAAAA");
+        if(op.equals("mdl")){
+            TypeInfo ti = new TypeInfo(returntype.toString());
+            ti.setMethod();
+            argdecls.typeCheck(ti);
+            symbolTable.addMethod(id, ti);
+            symbolTable.startScope();
+            fielddecllist.typeCheck();
+            stmts.typeCheck();
+            symbolTable.endScope();
+            methoddecllist.typeCheck();
+            return new TypeInfo();
+        }
+        else{
+            return new TypeInfo();
+        }
     }
+
+    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+        if(op.equals("mde")){
+            argdecls.typeCheck(ti);
+            symbolTable.addMethod(id, ti);
+            symbolTable.startScope();
+            fielddecllist.typeCheck();
+            stmts.typeCheck();
+            symbolTable.endScope();
+            methoddecllist.typeCheck();
+            return new TypeInfo();
+        }
+        else{
+            return new TypeInfo();
+        }
+    }
+
 }
