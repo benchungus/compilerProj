@@ -120,10 +120,6 @@ public class FieldDecls extends Token{
             TypeInfo ti = new TypeInfo(type.toString());
             ti.setArray();
             symbolTable.addVar(id, ti);
-            TypeInfo exprTi = optionalexpr.typeCheck();
-            if(!exprTi.isNull()){
-                canConvert(ti, exprTi);
-            }
             fielddecllist.typeCheck();
             return ti;
         }
