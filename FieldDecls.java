@@ -94,7 +94,7 @@ public class FieldDecls extends Token{
 
     public TypeInfo typeCheck() throws TypeException{
         if(op.equals("OPFIN")){
-            TypeInfo ti = new TypeInfo(type.toString());
+            TypeInfo ti = new TypeInfo(type.toString(0));
             if(optionalfinal.typeCheck() == true){
                 ti.setFinal();
             }
@@ -107,7 +107,7 @@ public class FieldDecls extends Token{
             return ti;
         }
         else if(op.equals("NO FIN")){
-            TypeInfo ti = new TypeInfo(type.toString());
+            TypeInfo ti = new TypeInfo(type.toString(0));
             symbolTable.addVar(id, ti);
             TypeInfo exprTi = optionalexpr.typeCheck();
             if(!exprTi.isNull()){
@@ -117,7 +117,7 @@ public class FieldDecls extends Token{
             return ti;
         }
         else if(op.equals("BRACK")){
-            TypeInfo ti = new TypeInfo(type.toString());
+            TypeInfo ti = new TypeInfo(type.toString(0));
             ti.setArray();
             symbolTable.addVar(id, ti);
             fielddecllist.typeCheck();

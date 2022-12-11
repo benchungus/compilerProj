@@ -19,16 +19,19 @@ abstract class Token {
         if(!lhs.getType().equals(rhs.getType())){
             if(lhs.getType().equals("bool")){
                 if(!rhs.getType().equals("int")){
-                    throw new TypeException("Error: cannot assign " + rhs.getType() + " to variable defined as type " + lhs.getType());
+                    throw new TypeException("Error: cannot assign " + rhs.getType() 
+                    + " to variable defined as type " + lhs.getType());
                 }
             }
             else if(lhs.getType().equals("float")){
                 if(!rhs.getType().equals("int")){
-                    throw new TypeException("Error: cannot assign " + rhs.getType() + " to variable defined as type " + lhs.getType());
+                    throw new TypeException("Error: cannot assign " + rhs.getType() 
+                    + " to variable defined as type " + lhs.getType());
                 }
             }
             else if(!lhs.getType().equals("string")){
-                throw new TypeException("Error: cannot assign " + rhs.getType() + " to variable defined as type " + lhs.getType());
+                throw new TypeException("Error: cannot assign " + rhs.getType() 
+                + " to variable defined as type " + lhs.getType());
             }
         }
     }

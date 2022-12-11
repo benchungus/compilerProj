@@ -137,6 +137,7 @@ public class Statement extends Token {
                 printList.typeCheck();
                 return new TypeInfo();
             case "call empty":{
+                symbolTable.printAll();
                 TypeInfo methodTi = symbolTable.getMethod(value);
                 ArrayList<TypeInfo> params = methodTi.getParams();
                 if(params.size() != 0){
@@ -145,6 +146,7 @@ public class Statement extends Token {
                 return new TypeInfo();
             }
             case "call full":
+                symbolTable.printAll();
                 TypeInfo methodTi = symbolTable.getMethod(value);
                 ArrayList<TypeInfo> params = methodTi.getParams();
                 ArrayList<TypeInfo> givenParams = args.typeCheck();
@@ -183,8 +185,9 @@ public class Statement extends Token {
                 symbolTable.endScope();
                 return new TypeInfo();
             case "while":{
-                if(!expr.typeCheck().getType().equals("bool") && !expr.typeCheck().getType().equals("int")){
-                    throw new TypeException("Condition must be of type bool");
+                TypeInfo ti1 = expr.typeCheck();
+                if(!ti1.getType().equals("bool") && !ti1.getType().equals("int")){
+                    throw new TypeException("Condition must be of type bool, instead got " + ti1.getType());
                 }
                 symbolTable.startScope();
                 fielddecllist.typeCheck();
@@ -193,8 +196,9 @@ public class Statement extends Token {
                 return ti;
             }
             case "if":
-                if(!expr.typeCheck().getType().equals("bool") && !expr.typeCheck().getType().equals("int")){
-                    throw new TypeException("Condition must be of type bool");
+                TypeInfo ti1 = expr.typeCheck();
+                if(!ti1.getType().equals("bool") && !ti1.getType().equals("int")){
+                    throw new TypeException("Condition must be of type bool, instead got " + ti1.getType());
                 }
                 symbolTable.startScope();
                 fielddecllist.typeCheck();

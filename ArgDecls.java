@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class ArgDecls extends Token{
     ArgDeclList argdecllist;
     String op;
@@ -23,12 +25,12 @@ public class ArgDecls extends Token{
         }
     }
 
-    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+    public ArrayList<TypeInfo> typeCheck(TypeInfo ti) throws TypeException{
         if(op.equals("adl")){
-            return argdecllist.typeCheck(ti);
+            return argdecllist.typeCheck();
         }
         else {
-            return new TypeInfo();
+            return new ArrayList<TypeInfo>();
         }
     }
 }

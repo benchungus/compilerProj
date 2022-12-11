@@ -34,7 +34,7 @@ public class Args extends Token{
             TypeInfo ti = expr.typeCheck();
             ArrayList<TypeInfo> al = args.typeCheck();
             al.add(0, ti);
-            return args.typeCheck();
+            return al;
         }
     }
 }

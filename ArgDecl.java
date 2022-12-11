@@ -21,19 +21,17 @@ public class ArgDecl extends Token{
         }
     }
 
-    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+    public TypeInfo typeCheck() throws TypeException{
         if(op.equals("brack")){
-            TypeInfo argti = new TypeInfo(type.toString());
-            ti.setArray();
+            TypeInfo argti = new TypeInfo(type.toString(0));
+            argti.setArray();
             symbolTable.addVar(id, argti);
-            ti.addParam(argti);
-            return new TypeInfo();
+            return argti;
         }
         else {
-            TypeInfo argti = new TypeInfo(type.toString());
+            TypeInfo argti = new TypeInfo(type.toString(0));
             symbolTable.addVar(id, argti);
-            ti.addParam(argti);
-            return new TypeInfo();
+            return argti;
         }
     }
 }

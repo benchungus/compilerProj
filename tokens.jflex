@@ -54,8 +54,14 @@ id = [a-zA-Z][a-zA-Z0-9]*
 character = \'[[[^\n]&&[^\t]]&&[[^\\]&&[^\']]]\'|\'\\\\\'|\'\\\'\'
 float = [0-9]+\.[0-9]+
 string = \"[[[[^\n]&&[^\t]]&&[[^\\]&&[^\"]]]|\\\\|\\\"|\\n|\\t]*\"
-comment = \\\\[^\n]*|\\\*[^\*\\]*\*\\
-
+slash			      = \\ 
+escapeapos		  = {slash}'
+escapequote		  = {slash}\"
+blockcommentS   = {slash}\*
+blockcommentE   = \*{slash}
+commentbody		  = ([^\*]|(\*+[^\\]))
+blockcomment    = {blockcommentS}{commentbody}*?{blockcommentE}
+inlinecomment 	= {slash}{slash}.*(\n|\r|\r\n)
 
 /**
  * Implement patterns as regex here
@@ -122,6 +128,7 @@ final           {return newSym(sym.FINAL, "final");}
 {character}     {return newSym(sym.CHARACTERLIT, yytext());}
 {string}        {return newSym(sym.STRINGLIT, yytext());}
 {whitespace}    { /* Ignore whitespace. */ }
-{comment}       { /* Ignore comments */ }
+{inlinecomment} { /* For this stand-alone lexer, print out comments. */}
+{blockcomment}	{ /* For this stand-alone lexer, print out comments. */}
 .               { System.out.println("Illegal char, '" + yytext() +
                     "' line: " + yyline + ", column: " + yychar); } 

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class ArgDeclList extends Token{
     ArgDecl argdecl;
     ArgDeclList argdecllist;
@@ -26,13 +28,17 @@ public class ArgDeclList extends Token{
         }
     }
 
-    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+    public ArrayList<TypeInfo> typeCheck() throws TypeException{
         if(op.equals("list")){
-            argdecl.typeCheck(ti);
-            return argdecllist.typeCheck(ti);
+            TypeInfo ti = argdecl.typeCheck();
+            ArrayList<TypeInfo> al = argdecllist.typeCheck();
+            al.add(0, ti);
+            return al;
         }
         else{
-            return argdecl.typeCheck(ti);
+            ArrayList<TypeInfo> al = new ArrayList<>();
+            al.add(0, argdecl.typeCheck());
+            return al;
         }
     }
 }

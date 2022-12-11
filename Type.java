@@ -7,9 +7,6 @@ public class Type extends Token {
 
     public String toString(int t) {
         return type;
-      }
-
-    public TypeInfo typeCheck() throws TypeException{
-        throw new TypeException("type");
     }
+
 }

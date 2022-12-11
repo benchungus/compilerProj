@@ -60,17 +60,17 @@ public class MemberDecls extends Token{
 
     public TypeInfo typeCheck() throws TypeException{
         if(op.equals("method")){
-            TypeInfo ti = new TypeInfo(type.toString());
+            TypeInfo ti = new TypeInfo(type.toString(0));
             ti.setMethod();
-            return methoddecllist.typeCheck(ti);
+            return methoddecllist.typeCheck(ti, id);
         }
         else if(op.equals("nonfinal")){
-            TypeInfo ti = new TypeInfo(type.toString());
+            TypeInfo ti = new TypeInfo(type.toString(0));
             symbolTable.addVar(id, ti);
             return fielddecllist.typeCheck(ti);
         }
         else if(op.equals("final")){
-            TypeInfo ti = new TypeInfo(type.toString());
+            TypeInfo ti = new TypeInfo(type.toString(0));
             ti.setFinal();
             symbolTable.addVar(id, ti);
             return fielddecllist.typeCheck(ti);
@@ -79,7 +79,7 @@ public class MemberDecls extends Token{
             //System.out.println("here");
             TypeInfo ti = new TypeInfo("void");
             ti.setMethod();
-            return methoddecllist.typeCheck(ti);
+            return methoddecllist.typeCheck(ti, id);
         }
         else{
             return new TypeInfo();
