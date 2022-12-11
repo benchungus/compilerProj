@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class MethodDecls extends Token {
     ReturnType returntype;
     String id;
@@ -51,10 +53,12 @@ public class MethodDecls extends Token {
 
     public TypeInfo typeCheck() throws TypeException{
         if(op.equals("mdl")){
-            TypeInfo ti = new TypeInfo(returntype.toString());
+            TypeInfo ti = new TypeInfo(returntype.toString(0));
             ti.setMethod();
-            argdecls.typeCheck(ti);
+            ArrayList<TypeInfo> al = argdecls.typeCheck(ti);
+            ti.importArray(al);
             symbolTable.addMethod(id, ti);
+            System.out.println("added method " + id + " with " + ti.getParams().size() + " parameters");
             symbolTable.startScope();
             fielddecllist.typeCheck();
             stmts.typeCheck();
@@ -67,10 +71,12 @@ public class MethodDecls extends Token {
         }
     }
 
-    public TypeInfo typeCheck(TypeInfo ti) throws TypeException{
+    public TypeInfo typeCheck(TypeInfo ti, String id) throws TypeException{
         if(op.equals("mde")){
-            argdecls.typeCheck(ti);
+            ArrayList<TypeInfo> al = argdecls.typeCheck(ti);
+            ti.importArray(al);
             symbolTable.addMethod(id, ti);
+            System.out.println("added method " + id + " with " + ti.getParams().size() + " parameters");
             symbolTable.startScope();
             fielddecllist.typeCheck();
             stmts.typeCheck();
@@ -82,5 +88,7 @@ public class MethodDecls extends Token {
             return new TypeInfo();
         }
     }
+
+    
 
 }
