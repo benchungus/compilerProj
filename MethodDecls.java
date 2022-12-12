@@ -58,7 +58,6 @@ public class MethodDecls extends Token {
             ArrayList<TypeInfo> al = argdecls.typeCheck(ti);
             ti.importArray(al);
             symbolTable.addMethod(id, ti);
-            System.out.println("added method " + id + " with " + ti.getParams().size() + " parameters");
             symbolTable.startScope();
             fielddecllist.typeCheck();
             ArrayList<TypeInfo> stmtal = stmts.typeCheck();
@@ -89,7 +88,6 @@ public class MethodDecls extends Token {
             ArrayList<TypeInfo> al = argdecls.typeCheck(ti);
             ti.importArray(al);
             symbolTable.addMethod(id, ti);
-            System.out.println("added method " + id + " with " + ti.getParams().size() + " parameters");
             symbolTable.startScope();
             fielddecllist.typeCheck();
             ArrayList<TypeInfo> stmtal = stmts.typeCheck();

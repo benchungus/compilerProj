@@ -38,7 +38,6 @@ public class Expr extends Token {
     }
 
     public Expr(String s){
-      System.out.println(s);
       if(s.charAt(0) == '\''){
         operator = "";
         value = Character.toString(s.charAt(1));
@@ -147,7 +146,6 @@ public class Expr extends Token {
             return ti;
           }
           case "string":{
-            System.out.println("here");
             TypeInfo ti = new TypeInfo("string");
             return ti;
           }
@@ -177,7 +175,6 @@ public class Expr extends Token {
             return ti1;
           }
           case "args":{
-            symbolTable.printAll();
             TypeInfo methodTi = symbolTable.getMethod(value);
             ArrayList<TypeInfo> params = methodTi.getParams();
             ArrayList<TypeInfo> givenParams = args.typeCheck();

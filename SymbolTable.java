@@ -21,7 +21,6 @@ public class SymbolTable {
     }
 
     public TypeInfo getMethod(String s) throws TypeException{
-        System.out.println("looking for method " + s + " size: " + table.size());
         for (int i = table.size()-1; i > -1; i--){
             HashMap<String, TypeInfo> map = table.get(i);
             if(map.containsKey(s)){
@@ -51,25 +50,10 @@ public class SymbolTable {
 
     public void startScope(){
         table.add(new HashMap<>());
-        System.out.println("started, new size: " + table.size());
     }
 
     public void endScope(){
         table.remove(table.size()-1);
-        System.out.println("ended, new size: " + table.size());
-    }
-
-    public void printAll(){
-        System.out.println("Printing all");
-        for(int i = 0; i < table.size(); i++){
-            System.out.println("Level " + i);
-            HashMap<String, TypeInfo> map = table.get(i);
-            for(String x : map.keySet()){
-                if(map.get(x).isMethod){
-                    System.out.println(x);
-                }
-            }
-        }
     }
 
 }

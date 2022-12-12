@@ -76,7 +76,6 @@ public class MemberDecls extends Token{
             return fielddecllist.typeCheck(ti);
         }
         else if(op.equals("VOID")){
-            //System.out.println("here");
             TypeInfo ti = new TypeInfo("void");
             ti.setMethod();
             return methoddecllist.typeCheck(ti, id);

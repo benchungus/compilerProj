@@ -136,14 +136,12 @@ public class Statement extends Token {
                 readList.typeCheck();
                 return new TypeInfo();
             case "print":
-                //System.out.println("here");
                 printList.typeCheck();
                 return new TypeInfo();
             case "printline":
                 printList.typeCheck();
                 return new TypeInfo();
             case "call empty":{
-                symbolTable.printAll();
                 TypeInfo methodTi = symbolTable.getMethod(value);
                 ArrayList<TypeInfo> params = methodTi.getParams();
                 if(params.size() != 0){
@@ -152,7 +150,6 @@ public class Statement extends Token {
                 return new TypeInfo();
             }
             case "call full":
-                symbolTable.printAll();
                 TypeInfo methodTi = symbolTable.getMethod(value);
                 ArrayList<TypeInfo> params = methodTi.getParams();
                 ArrayList<TypeInfo> givenParams = args.typeCheck();

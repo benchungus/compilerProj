@@ -1,6 +1,3 @@
-import java.util.List;
-import java.util.LinkedList;
-
 class PrintLineList extends Token {
   private Expr expr;
   private PrintLineList pll;
@@ -40,7 +37,6 @@ class PrintLineList extends Token {
     if(pll == null){
       if(expr != null){
         TypeInfo exprTi = expr.typeCheck();
-        System.out.println(exprTi.getType());
         if(exprTi.isArray){
           throw new TypeException("Error: Cannot print an array");
         }

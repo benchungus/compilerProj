@@ -1,3 +1,0 @@
-added method foo with 0 parameters
-started, new size: 2
-ended, new size: 1
