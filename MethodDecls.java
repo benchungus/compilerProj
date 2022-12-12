@@ -61,8 +61,21 @@ public class MethodDecls extends Token {
             System.out.println("added method " + id + " with " + ti.getParams().size() + " parameters");
             symbolTable.startScope();
             fielddecllist.typeCheck();
-            stmts.typeCheck();
+            ArrayList<TypeInfo> stmtal = stmts.typeCheck();
             symbolTable.endScope();
+            if(stmtal.size() == 0){
+                if(!ti.getType().equals("void")){
+                    throw new TypeException("Error: did not return type " + ti.getType() + " instead got void");
+                }
+            }
+            else{
+                for(int i = 0; i < stmtal.size(); i++){
+                    canConvert(ti, stmtal.get(i));
+                    if(ti.getArray() != stmtal.get(i).getArray()){
+                        throw new TypeException("Error: Tried to use array in place of non array");
+                    }
+                }
+            }
             methoddecllist.typeCheck();
             return new TypeInfo();
         }
@@ -79,8 +92,21 @@ public class MethodDecls extends Token {
             System.out.println("added method " + id + " with " + ti.getParams().size() + " parameters");
             symbolTable.startScope();
             fielddecllist.typeCheck();
-            stmts.typeCheck();
+            ArrayList<TypeInfo> stmtal = stmts.typeCheck();
             symbolTable.endScope();
+            if(stmtal.size() == 0){
+                if(!ti.getType().equals("void")){
+                    throw new TypeException("Error: did not return type " + ti.getType() + " instead got void");
+                }
+            }
+            else{
+                for(int i = 0; i < stmtal.size(); i++){
+                    canConvert(ti, stmtal.get(i));
+                    if(ti.getArray() != stmtal.get(i).getArray()){
+                        throw new TypeException("Error: Tried to use array in place of non array");
+                    }
+                }
+            }
             methoddecllist.typeCheck();
             return new TypeInfo();
         }

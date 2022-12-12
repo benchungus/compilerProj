@@ -5,7 +5,7 @@ public class TypeInfo{
     String type;
     boolean isArray = false;
     boolean isMethod = false;
-    ArrayList<TypeInfo> params;
+    ArrayList<TypeInfo> params = new ArrayList<>();
     public TypeInfo(){
 
     }

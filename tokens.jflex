@@ -49,25 +49,37 @@ Symbol newSym(int tokenId, Object value) {
  * PATTERN DEFINITIONS:
  */
 
-integer = [0-9]+
-id = [a-zA-Z][a-zA-Z0-9]*
-character = \'[[[^\n]&&[^\t]]&&[[^\\]&&[^\']]]\'|\'\\\\\'|\'\\\'\'
-float = [0-9]+\.[0-9]+
-string = \"[[[[^\n]&&[^\t]]&&[[^\\]&&[^\"]]]|\\\\|\\\"|\\n|\\t]*\"
+tab     				= \\t
+newline	        = \\n
 slash			      = \\ 
 escapeapos		  = {slash}'
 escapequote		  = {slash}\"
+letter      	  = [A-Za-z]
+digit       	  = [0-9]
+id   			      = {letter}({letter}|{digit})* 
+integer	    	  = {digit}+
+float    	  = {integer}+\.{integer}+
+
+charchar		    = [[^\\]&&[^']]|{newline}|{tab}|{escapeapos}|{slash}{slash}
+character     	  = '{charchar}'
+
+stringchar		  = [[[^\\]&&[^\"]]&&[[^\n]&&[^\t]]]|{newline}|{tab}|{escapequote}|{slash}{slash}
+string		    = \"{stringchar}*\"
 blockcommentS   = {slash}\*
 blockcommentE   = \*{slash}
+
+escapeapos		  = {slash}'
+escapequote		  = {slash}\"
+
 commentbody		  = ([^\*]|(\*+[^\\]))
 blockcomment    = {blockcommentS}{commentbody}*?{blockcommentE}
 inlinecomment 	= {slash}{slash}.*(\n|\r|\r\n)
+whitespace      = [ \n\t\r]
 
 /**
  * Implement patterns as regex here
  */
 
-whitespace = [ \n\t\r]
 
 
 

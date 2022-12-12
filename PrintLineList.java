@@ -40,6 +40,7 @@ class PrintLineList extends Token {
     if(pll == null){
       if(expr != null){
         TypeInfo exprTi = expr.typeCheck();
+        System.out.println(exprTi.getType());
         if(exprTi.isArray){
           throw new TypeException("Error: Cannot print an array");
         }

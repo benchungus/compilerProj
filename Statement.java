@@ -122,6 +122,11 @@ public class Statement extends Token {
                 if(ti.isArray != exprTi.isArray){
                     throw new TypeException("Error: Array type and non-array type cannot be used together in assignment");
                 }
+                if(ti.isArray){
+                    if(!ti.getType().equals(exprTi.type)){
+                        throw new TypeException("Error: Types must be the same for assignment with arrays");
+                    }
+                }
                 if(ti.isFinal){
                     throw new TypeException("Error: Cannot assign new value to a final variable");
                 }
@@ -131,6 +136,7 @@ public class Statement extends Token {
                 readList.typeCheck();
                 return new TypeInfo();
             case "print":
+                //System.out.println("here");
                 printList.typeCheck();
                 return new TypeInfo();
             case "printline":
@@ -191,9 +197,11 @@ public class Statement extends Token {
                 }
                 symbolTable.startScope();
                 fielddecllist.typeCheck();
-                TypeInfo ti = stmts.typeCheck();
+                ArrayList<TypeInfo> al = stmts.typeCheck();
+                TypeInfo results = new TypeInfo();
+                results.importArray(al);
                 symbolTable.endScope();
-                return ti;
+                return results;
             }
             case "if":
                 TypeInfo ti1 = expr.typeCheck();
@@ -202,10 +210,18 @@ public class Statement extends Token {
                 }
                 symbolTable.startScope();
                 fielddecllist.typeCheck();
-                TypeInfo ti = stmts.typeCheck();
+                ArrayList<TypeInfo> al = stmts.typeCheck();
+                TypeInfo results = new TypeInfo();
+                results.importArray(al);
                 symbolTable.endScope();
-                ifend.typeCheck();
-                return ti;
+                TypeInfo result2 = ifend.typeCheck();
+                if(result2.getParams().size() != 0){
+                    for(int i = 0; i < result2.getParams().size(); i++){
+                        al.add(result2.getParams().get(i));
+                    }
+                    results.importArray(al);
+                }
+                return results;
           }
         return new TypeInfo();
     }

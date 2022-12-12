@@ -35,16 +35,16 @@ public class SymbolTable {
 
     public void addVar(String id, TypeInfo t) throws TypeException{
         HashMap<String, TypeInfo> map = table.get(table.size()-1);
-        if(map.containsKey(id) && map.get(id).getMethod() == false){
-            throw new TypeException("Error: tried to redeclare variable " + id);
+        if(map.containsKey(id)){
+            throw new TypeException("Error: tried to redeclare " + id);
         }
         map.put(id, t);
     }
 
     public void addMethod(String id, TypeInfo t) throws TypeException{
         HashMap<String, TypeInfo> map = table.get(table.size()-1);
-        if(map.containsKey(id) && map.get(id).getMethod() != false){
-            throw new TypeException("Error: tried to redeclare method " + id);
+        if(map.containsKey(id)){
+            throw new TypeException("Error: tried to redeclare " + id);
         }
         map.put(id, t);
     }

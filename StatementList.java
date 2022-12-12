@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class StatementList extends Token {
     Statement stmt;
     StatementList stmts;
@@ -26,24 +28,40 @@ public class StatementList extends Token {
         }
     }
 
-    public TypeInfo typeCheck() throws TypeException{
+    public ArrayList<TypeInfo> typeCheck() throws TypeException{
         if(stmts == null){
             if(stmt != null){
                 TypeInfo ti = stmt.typeCheck();
                 if(!ti.isNull()){
-                    return ti;
+                    ArrayList<TypeInfo> al = new ArrayList<>();
+                    al.add(ti);
+                    return al;
                 }
-                return new TypeInfo();
+                else{
+                    ArrayList<TypeInfo> al = new ArrayList<>();
+                    if(ti.getParams().size() != 0){
+                        for(int i = 0; i < ti.getParams().size(); i++){
+                            al.add(ti.getParams().get(i));
+                        }
+                    }
+                    return al;
+                }
             }
-            return new TypeInfo();
+            return new ArrayList<>();
         }
         else{
             TypeInfo ti = stmt.typeCheck();
-            TypeInfo stmtsTi = stmts.typeCheck();
+            ArrayList<TypeInfo> stmtsTi = stmts.typeCheck();
             if(!ti.isNull()){
-                return ti;
+                stmtsTi.add(ti);
+                return stmtsTi;
             }
             else{
+                if(ti.getParams().size() != 0){
+                    for(int i = 0; i < ti.getParams().size(); i++){
+                        stmtsTi.add(ti.getParams().get(i));
+                    }
+                }
                 return stmtsTi;
             }
         }

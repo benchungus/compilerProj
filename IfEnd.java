@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class IfEnd extends Token{
     StatementList stmts;
     FieldDecls fielddeclslist;
@@ -24,9 +26,11 @@ public class IfEnd extends Token{
         else{
             symbolTable.startScope();
             fielddeclslist.typeCheck();
-            TypeInfo ti = stmts.typeCheck();
+            ArrayList<TypeInfo> al = stmts.typeCheck();
+            TypeInfo results = new TypeInfo();
+            results.importArray(al);
             symbolTable.endScope();
-            return ti;
+            return results;
         }
     }
 }

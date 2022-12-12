@@ -38,10 +38,19 @@ public class Expr extends Token {
     }
 
     public Expr(String s){
-      value = s;
-      operator = "";
-      tp = "string";
-      tpString = s;
+      System.out.println(s);
+      if(s.charAt(0) == '\''){
+        operator = "";
+        value = Character.toString(s.charAt(1));
+        tp = "char";
+        tpString = value;
+      }
+      else{
+        value = s;
+        operator = "";
+        tp = "string";
+        tpString = s;
+      }
     }
     
     public Expr(float f){
@@ -138,6 +147,7 @@ public class Expr extends Token {
             return ti;
           }
           case "string":{
+            System.out.println("here");
             TypeInfo ti = new TypeInfo("string");
             return ti;
           }
